@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Residente {{ residente.primerapellido }} {% endblock %}
+
+{% block body %}
+    {{ parent() }}
+            <div class="col-10">
+                <div class="card" style="width: 18rem;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        {{ dump(residente) }}
+                        <h5 class="card-title">{{ residente.nombre }}</h5>
+                        <p class="card-text">{{ residente.primerapellido }} {{ residente.segundoapellido }}</p>
+                        <a href="{{ path('editar_residente',{id:residente.id}) }}" class="btn btn-primary">Editar Campos</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>{# CIERRE DEL SIDEBAR #}
+    </div>
+{% endblock %}

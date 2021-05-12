@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel de Residentes{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+            <div class="col-10">
+                <div id="content">
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                        <div class="container-fluid">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info">
+                                <i class="fas fa-align-left"></i>
+                                <span>Toggle Sidebar</span>
+                            </button>
+                        </div>
+                    </nav>
+                </div>
+                <div class="row">
+                    {% for residente in residentes %}
+                        <div class="col-3">
+                            <div class="bg-white rounded p-3 my-3" onclick="window.location.href='{{ path('ver_residente',{id:residente.id}) }}'">
+                                <div class="d-flex bd-hightlight">
+                                    <div class="p-2 flex-grow-1 bd-highlight">
+                                        <h3>{{ residente.nombre }}</h3>
+                                        <div class="my-3 bg-yellow"><i class="fa fa-user"></i><strong>{{ residente.primer_apellido }} {{ residente.segundo_apellido }}</strong></div>
+                                        <div class="bg-green"><i class="fa fa-clock"></i><strong>Id de Residente: {{ residente.id }}</strong></div>
+                                    </div>
+                                    <div class="p-2 bd-highlight">
+                                        <div class="align-self-center">
+                                            <img class="rounded" src="" width="150px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
