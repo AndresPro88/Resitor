@@ -22,8 +22,17 @@ class ResidenteRepository extends ServiceEntityRepository
     public function BuscarTodosResidentes(){
         return $this->getEntityManager()
             ->createQuery('
-            SELECT residente.id, residente.nombre, residente.primer_apellido, residente.segundo_apellido
+            SELECT residente.id, residente.nombre, residente.primer_apellido, residente.segundo_apellido, residente.fecha_ingreso, residente.accidente
             FROM App:Residente residente
+            ORDER BY residente.primer_apellido
+            ')->getResult();
+    }
+    public function buscarDiabetes(){
+        return $this->getEntityManager()
+            ->createQuery('
+            SELECT residente.id, residente.nombre, residente.primer_apellido, residente.segundo_apellido, residente.diabetes
+            FROM App:Residente residente
+            WHERE residente.diabetes != 0 
             ORDER BY residente.primer_apellido
             ')->getResult();
     }

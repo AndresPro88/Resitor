@@ -22,6 +22,28 @@ class Podologo
      */
     private $nombre;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Residente", mappedBy="podologo")
+     */
+    private $residente;
+
+    /**
+     * @return mixed
+     */
+    public function getResidente()
+    {
+        return $this->residente;
+    }
+
+    /**
+     * @param mixed $residente
+     */
+    public function setResidente($residente): void
+    {
+        $this->residente = $residente;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;

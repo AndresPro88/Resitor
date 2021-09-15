@@ -1,0 +1,173 @@
+/*!
+ * Bootstrap v4.3.1 (https://getbootstrap.com/)
+ * Copyright 2011-2019 The Bootstrap Authors
+ * Copyright 2011-2019 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+/* MENU LATERAL DERECHO*/
+    @media (max-width: 1000px) {
+        button{
+            font-size: 14px;
+            text-align: center;
+        }
+        button i {
+            text-align: center;
+            font-size: 24px !important;
+            display:block !important;
+        }
+    }
+/* FIN MENU LATERAL DERECHO*/
+
+    .card{
+        background: #4dd9c1;
+    }
+    #menu{
+        background-color: #4dd9c1 !important;
+        height: 50px;
+    }
+    #navBar{
+        background: #4dd9c1;
+        color: #FFFFFF;
+    }
+    #sidebar {
+        background: #4dd9c1;
+        color: #FFFFFF;
+        -webkit-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        transition: all 0.3s;
+        min-width: 80px;
+    }
+    #sidebar.active, #navBar.active {
+        text-align: center;
+    }
+    #sidebar.active ul.components li {
+        font-size: 14px;
+    }
+    #sidebar.active ul.components li a {
+        padding: 10px 0;
+    }
+    #sidebar.active ul.components li a span {
+        margin-right: 0;
+        display: block;
+        font-size: 24px;
+    }
+    #sidebar.active .logo {
+        padding: 10px 0;
+    }
+    #sidebar.active .footer {
+        display: none;
+    }
+    #sidebar .logo {
+       font-size: 2vw;
+        display: block;
+        color: #ffffff;
+        font-weight: 900;
+        padding: 10px 30px;
+        -webkit-transition: 0.3s;
+        -o-transition: 0.3s;
+        transition: 0.3s;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        #sidebar .logo {
+            -webkit-transition: none;
+            -o-transition: none;
+            transition: none;
+        }
+    }
+    #sidebar ul.components {
+        padding: 0;
+        -webkit-transition: 0.3s;
+        -o-transition: 0.3s;
+        transition: 0.3s; }
+    @media (prefers-reduced-motion: reduce) {
+        #sidebar ul.components {
+            -webkit-transition: none;
+            -o-transition: none;
+            transition: none; }
+    }
+    #sidebar ul li {
+        font-size: 16px;
+    }
+    #sidebar ul li > ul {
+        margin-left: 10px;
+    }
+    #sidebar ul li > ul li {
+        font-size: 14px;
+    }
+    #sidebar ul li a {
+        text-shadow: black;
+        padding: 10px 30px;
+        display: block;
+        color: #ffffff;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    #sidebar ul li a span {
+        margin-right: 15px;
+    }
+    @media (max-width: 768px) {
+        #sidebar ul li a span {
+            display: block; }
+    }
+    #sidebar ul li a:hover {
+        color: #4dd9c1;
+        background-color: #ffffff;
+    }
+    #sidebar ul li.active > a {
+      background: #4dd9c1;
+      color: #fff;
+    }
+    @media (max-width: 768px) {
+        #sidebar {
+            text-align: center;
+        }
+        #sidebar.active {
+            margin-left: 0 !important;
+        }
+    }
+
+    a[data-toggle="collapse"] {
+        position: relative;
+    }
+    .dropdown-toggle::after {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+    @media (max-width: 768px) {
+        #sidebarCollapse span {
+            display: none;
+        }
+    }
+    .footer {
+        padding: 0 30px;
+    }
+    @media (max-width: 768px) {
+        .footer {
+            display: none;
+        }
+    }
+
+    #content {
+      width: 100%;
+      padding: 0;
+      min-height: 100vh;
+      -webkit-transition: all 0.3s;
+      -o-transition: all 0.3s;
+      transition: all 0.3s;
+    }
+
+    .btn.btn-primary {
+        color: #FFFFFF;
+      background: #4dd9c1;
+      border-color: #ffffff;
+    }
+    .btn.btn-primary:hover, .btn.btn-primary:focus {
+        background: #FFFFFF !important;
+        border-color: #4dd9c1 !important;
+        color:#4dd9c1
+    }

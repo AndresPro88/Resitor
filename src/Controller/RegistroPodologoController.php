@@ -30,6 +30,8 @@ class RegistroPodologoController extends AbstractController
                 $this->addFlash('error','Hubo Problemas al registrar al Podologo/a');
             }
         }
+
+
         return $this->render('registro_podologo/index.html.twig', [
             'formPod' => $form->createView(),
         ]);

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listar Accidente{% endblock %}
+
+{% block body %}
+
+    {{ parent() }}
+    <div class="col-10">
+        <h3 class="text-center">Listado de residentes con diabetes</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo de Diabetes</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for residente in listado_diabetes %}
+                <tr>
+                    <td><a href="{{ path('ver_residente',{id:residente.id}) }}">{{ residente.nombre }} {{ residente.primer_apellido }} {{ residente.segundo_apellido }} </a></td>
+                    {% if residente.diabetes == 1 %}
+                        <td>Tipo 1</td>
+                    {% elseif residente.diabetes == 2 %}
+                        <td>Tipo 2</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
+{% endblock %}

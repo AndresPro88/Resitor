@@ -1,25 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Residencia{% endblock %}</title>
+        <title>{% block title %}Residencia los Pinares{% endblock %}</title>
         {% block stylesheets %}
             {#{{ encore_entry_link_tags('app') }}#}
             <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/stylesheet.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/estilos.css') }}">
         {% endblock %}
 
         {% block javascripts %}
             <script src="{{ asset('js/jquery.min.js') }}"></script>
+            <script src="{{ asset('js/graficos.js') }}"></script>
             <script src="{{ asset('js/bootstrap.min.js') }}"></script>
             <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
             <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+            <script src="https://kit.fontawesome.com/c9e8ddca18.js" crossorigin="anonymous"></script>
             <script>
                 $(document).ready(function () {
-                    $('#sidebarCollapse').on('click', function () {
-                        $('#sidebar').toggleClass('active');
+                    redimensionar();
+                    $(window).resize(function(){
+                        redimensionar();
                     });
+
+                    if (window.history.replaceState) { // verificamos disponibilidad
+                        window.history.replaceState(null, null, window.location.href);
+                    }
                 });
+                function redimensionar(){
+                    if($(window).width() < 1000){
+                        $('#sidebar').addClass('active');
+                        $('#logo').html('R');
+                        $('#logo').css('font-size','10vw')
+                    }else{
+                        $('#sidebar').removeClass('active');
+                        $('#logo').html('Residencia');
+                        $('#logo').css('font-size','2vw')
+                    }
+                }
             </script>
         {% endblock %}
     </head>
@@ -29,60 +48,40 @@
                 <div class="row">
                     <div class="col-2">
                         <!-- Sidebar -->
-                        <nav id="sidebar">
-                            <div class="sidebar-header">
-                                <h3>Residencia</h3>
-                            </div>
-                            <ul class="list-unstyled components">
-                                <a href="{{ path('dashboard') }}"><p>Panel de Control</p></a>
-                                <li>
-                                    <a href="{{ path('registro_residente') }}">Nuevo Residente</a>
-                                </li>
-                                <li class="active">
-                                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-                                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                                        <li>
-                                            <a href="#">Home 1</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Home 2</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Home 3</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#">About</a>
-                                </li>
-                                <li>
-                                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                                        <li>
-                                            <a href="#">Page 1</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Page 2</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Page 3</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#">Portfolio</a>
-                                </li>
-                                <li>
-                                    <form class="form-inline">
-                                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-
-
+                        <div class=" h-100" >
+                            <nav id="sidebar" class="shadow-sm | h-100 w-100">
+                                <h1><span id="logo" class="logo">R</span></h1>
+                                <ul class="list-unstyled components mb-5">
+                                    <li class="shadow-sm"><a href="{{ path('dashboard') }}"><span class="fa fa-home"></span>Panel de Control</a></li>
+                                    <li class="shadow-sm">
+                                        <a href="#addSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="fa fa-user"></span>Agregar</a>
+                                        <ul class="collapse list-unstyled" id="addSubMenu">
+                                            <li><a href="{{ path('registro_residente') }}"><span class="fa fa-user"></span>Nuevo Residente</a></li>
+                                            <li><a href="{{ path('registro_map') }}"><span class="fas fa-user-md"></span>Nuevo Medico MAP</a></li>
+                                            <li><a href="{{ path('registro_podologo') }}"><span class="fas fa-shoe-prints"></span>Nuevo Podologo</a></li>
+                                            <li><a href="{{ path('registro_accidente') }}"><span class="fas fa-user-injured"></span>Nuevo Accidente</a></li>
+                                            <li><a href="{{ path('registro_contacto') }}"><span class="fas fa-address-book"></span>Nuevo Contacto</a></li>
+                                            <li><a href="{{ path('registro_sondas') }}"><span class="fab fa-affiliatetheme"></span>Nuevo Sondaje</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="shadow-sm">
+                                        <a href="#listSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="fa fa-sticky-note"></span> Listados</a>
+                                        <ul class="collapse list-unstyled" id="listSubMenu">
+                                            <li><a href="{{ path('listar_accidentes') }}"><span class="fas fa-user-injured"></span>Listar Accidentes</a> </li>
+                                            <li><a href="{{ path('listar_diabetes') }}"><span class="fas fa-cubes"></span>Listar Diabetes</a></li>
+                                            <li><a href="{{ path('listar_sondas') }}"><span class="fab fa-affiliatetheme"></span>Listar Sondas</a></li>
+                                            <li><a href="#">Page 3</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="{{ path('registro_user') }}"><span class="fa fa-cogs"></span> Registrar Usuario</a></li>
+                                    <li><a href="#"><span class="fa fa-paper-plane"></span> Contacts</a></li>
+                                </ul>
+                                <div class="footer">
+                                </div>
+                            </nav>
+                        </div><!-- FIN SIDEBAR NUEVO -->
+                    </div><!-- FIN DE LA COLUMNA -->
         {% endblock %}
+
     </body>
 </html>

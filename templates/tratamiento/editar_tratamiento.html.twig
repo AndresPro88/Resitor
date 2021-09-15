@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Residente{% endblock %}
+
+
+        {% block javascripts %}
+            {{ parent() }}
+            <script>
+
+                $(document).ready(function(){
+                    if({{ tratamiento.desayuno }} == 1){
+                        $('#tratamiento_horario_0').prop('checked',true);
+                    }
+                    if({{ tratamiento.comida }} == 1){
+                        $('#tratamiento_horario_1').prop('checked',true);
+                    }
+                    if({{ tratamiento.cena }} == 1){
+                        $('#tratamiento_horario_2').prop('checked',true);
+                    }
+                    if({{ tratamiento.recena }} == 1){
+                        $('#tratamiento_horario_3').prop('checked',true);
+                    }
+                    {#$('#residente_enviar').attr('class','btn btn-success');#}
+                    {#$('#residente_med_map').val({{ residente.medmap.nombre }});#}
+                    {#$('#residente_podologia').val({{ residente.podologia.nombre }});#}
+                    {#//FORMATEANDO Y POPULANDO FECHA NACIMIENTO#}
+                    {#fechaNac = '{{residente.fechanac | date('yy-m-d')}}'.split('-');#}
+                    {#$('#residente_fecha_nac_month').val(fechaNac[1].replace(/^(0+)/g, ''));#}
+                    {#$('#residente_fecha_nac_day').val(fechaNac[2].replace(/^(0+)/g, ''));#}
+                    {#$('#residente_fecha_nac_year').val(fechaNac[0]);#}
+                    {#//PUPULANDO CAMPOS MEDICOS#}
+                    {#$('#residente_hipertension').val({{residente.hipertension}});#}
+                    {#$('#residente_anticoagulante').val({{residente.anticoagulante}});#}
+                    {#$('#residente_diabetes').val({{residente.diabetes}});#}
+                    {#$('#residente_oxigeno').val({{residente.oxigeno}});#}
+                    {#$('#residente_demencia').val({{residente.demencia}});#}
+                    {#$('#residente_nivel_dependencia').val({{residente.niveldependencia}});#}
+
+                });
+            </script>
+        {% endblock %}
+{% block body %}
+    {{ parent() }}
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-10">
+                <h1 class="mt-5 | text-center">Editar Tratamiento del residente:  {{ residente.nombre }} {{ residente.primerapellido }}</h1>
+                <div class="postForm">
+                    {% for message in app.flashes('success_editar_tratamiento') %}
+                        <div class="alert alert-success alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                    {% for message in app.flashes('error_editar_tratamiento') %}
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-10 | mt-3 | bg-white | rounded">
+                {{ form_start(form_editar_tratamiento) }}
+                <div class="form-row DatosPersonales">
+                    <div class="col-12 col-md-4">
+                        <div class="form-group | mt-3">
+                            {{ form_label(form_editar_tratamiento.medicamento) }}
+                            {{ form_widget(form_editar_tratamiento.medicamento,{value:tratamiento.medicamento}) }}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="form-group | mt-3">
+                            {{ form_label(form_editar_tratamiento.horario) }}
+                            {{ form_widget(form_editar_tratamiento.horario) }}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="form-group | mt-3">
+                            {{ form_label(form_editar_tratamiento.observaciones) }}
+                            {{ form_widget(form_editar_tratamiento.observaciones,{value:tratamiento.observaciones}) }}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="form-group | mt-3">
+                            {{ form_label(form_editar_tratamiento.actual) }}
+                            {{ form_widget(form_editar_tratamiento.actual) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row | justify-content-center | Enviar">
+                    <div class="col-12 text-center">
+                        <div class="form-group | mt-3">
+                            {{ form_label(form_editar_tratamiento.enviar) }}
+                            {{ form_widget(form_editar_tratamiento.enviar) }}
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(form_editar_tratamiento) }}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

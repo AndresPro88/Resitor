@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listar Accidente{% endblock %}
+
+{% block body %}
+
+    {{ parent() }}
+        <div class="col-10">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Residente</th>
+                        <th>Fecha del accidente</th>
+                        <th>Consecuencias</th>
+                        <th>Actuacion DUE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for accidente in accidentes %}
+                        <tr>
+                            <td><a href="{{ path('ver_residente',{id:accidente.residente.id}) }}">{{ accidente.residente.nombre }} {{ accidente.residente.primerapellido }} {{ accidente.residente.segundoapellido }}</td></td>
+                            <td>{{ accidente.fechaaccidente | date ('y-m-d') }}</td>
+                            <td>{{ accidente.consecuencias }}</td>
+                            <td>{{ accidente.actuaciondue }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
+{% endblock %}

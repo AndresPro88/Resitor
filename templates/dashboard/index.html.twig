@@ -1,39 +1,100 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Panel de Residentes{% endblock %}
-
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        h3, h5{
+            color: #ffffff;
+            text-shadow: black 1px 1px 1px;
+        }
+        .card{
+            background: #dcdcdc;
+        }
+        .card-deck{
+            margin-top: 10px;
+            margin-left: auto;
+            display: grid;
+            grid-auto-rows: auto ;
+            grid-template-columns: repeat(auto-fit, minmax(15rem, 2fr));
+            grid-gap: .5rem;
+        }
+        @media (min-width: 480px) {
+            .card{
+                max-width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function(){
+        //     var colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
+        //         '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+        //         '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A',
+        //         '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+        //         '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC',
+        //         '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+        //         '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680',
+        //         '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+        //         '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
+        //         '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
+        //     $('.card').each(function(){
+        //         $(this).css('background-color',colorArray[Math.floor((Math.random() * (colorArray.length-1)) + 1)]);
+        //     })
+            $('#buscar').keyup(function(){
+                if($('#buscar').val().length >= 3){
+                    $('.card').each(function(){
+                        if(!$(this).attr('id').toLowerCase().includes($('#buscar').val().toLowerCase())){
+                            $(this).hide();
+                        }else{
+                            $(this).show();
+                        }
+                    });
+                }else{
+                    $('.card').each(function(){
+                        $(this).show();
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}
 {% block body %}
     {{ parent() }}
             <div class="col-10">
-                <div id="content">
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                        <div class="container-fluid">
-                            <button type="button" id="sidebarCollapse" class="btn btn-info">
-                                <i class="fas fa-align-left"></i>
-                                <span>Toggle Sidebar</span>
-                            </button>
-                        </div>
-                    </nav>
-                </div>
                 <div class="row">
-                    {% for residente in residentes %}
-                        <div class="col-3">
-                            <div class="bg-white rounded p-3 my-3" onclick="window.location.href='{{ path('ver_residente',{id:residente.id}) }}'">
-                                <div class="d-flex bd-hightlight">
-                                    <div class="p-2 flex-grow-1 bd-highlight">
-                                        <h3>{{ residente.nombre }}</h3>
-                                        <div class="my-3 bg-yellow"><i class="fa fa-user"></i><strong>{{ residente.primer_apellido }} {{ residente.segundo_apellido }}</strong></div>
-                                        <div class="bg-green"><i class="fa fa-clock"></i><strong>Id de Residente: {{ residente.id }}</strong></div>
-                                    </div>
-                                    <div class="p-2 bd-highlight">
-                                        <div class="align-self-center">
-                                            <img class="rounded" src="" width="150px">
+                    <div class="col-12">
+                        <input id="buscar" class="w-100 mt-4" placeholder="Buscar por nombre o apellidos" type="text">
+                    </div>
+                    <div class="col-12">
+                            <div class="card-deck mt-3">
+                            {% for residente in residentes %}
+                                    <div id="{{ residente.nombre }} {{ residente.primerapellido }} {{ residente.segundoapellido }}" class="card | shadow-sm">
+                                        <div class="card-body | text-center | align-self-center">
+                                            {% if residente.foto != null %}
+                                                <img src="/uploads/imagenes/{{ residente.foto }}" class="rounded-circle | w-100">
+                                            {% elseif residente.foto == null %}
+                                                <img src="/uploads/imagenes/men.jpg" class="rounded-circle | w-100">
+                                            {% endif %}
+                                            <h3 class="nombre">{{ residente.nombre }}</h3>
+                                            <h5 class="apellido">{{ residente.primerapellido }} {{ residente.segundoapellido }}</h5>
+                                            {% if residente.accidenteultimasemana == true %}
+                                                <span class="badge badge-danger badge-pill">Accidente última semana</span>
+                                            {% endif %}
+{#                                            <p class="card-text"><i class="fa fa-clock | pr-2"></i>Fecha de Ingreso: {{ residente.fechaingreso | date('d-m-y') }} </p>#}
+                                            <hr class="style5">
+                                            <div class="card-footer">
+                                                <button class="btn btn-primary | mb-2" onclick="window.location.href='{{ path('ver_residente',{id:residente.id}) }}'"><i class="fas fa-eye | pr-2"></i>Ver residente</button>
+                                                <button class="btn btn-primary | mb-2" onclick="window.location.href='{{ path('editar_residente',{id:residente.id}) }}'"><i class="fas fa-edit | pr-2"></i>Modificar datos</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                            {% endfor %}
                             </div>
-                        </div>
-                    {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,183 +1,293 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Registrar Nuevo Residente{% endblock %}
-        {% block stylesheets %}
-            {#{{ encore_entry_link_tags('app') }}#}
-            <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-            <link rel="stylesheet" href="{{ asset('css/stylesheet.css') }}">
-            <style>
-                .col-form-label{
-                    padding-top: 0 !important;
+{% block javascripts %}
+    {{ parent() }}
+        <script src="/js/ajax.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('#residente_dni').focusout(function(){
+                    consultarDni($('#residente_dni').val());
+                });
+                $('#residente_enviar').hide();
+                $('#next').click(function(){
+                    comprobarCampos(1);
+                });
+                $('#back').click(function(){
+                    comprobarCampos(-1);
+                });
+                //PRUEBA DE PATRON
+                $('#residente_nombre').attr('pattern',/^[0-9!@#$%^&*()_+\-=\[\]{};'."'".':"|,.<>\/?]*$/);
+            });
+            function comprobarCampos(valor){
+                let flag = false;
+                $(':input').each(function(){
+                    if($(this).val() == '' || $(this).val() ==' ' || $('#residente_dni').hasClass('is-invalid')){
+                        flag = false;
+                    }else{
+                        flag = true;
+                    }
+                });
+                if (flag == true){
+                    $('#error_seccion').addClass('d-none');
+                    checkHuevo2(valor);
+                }else{
+                    $('#error_seccion').removeClass('d-none');
                 }
-            </style>
-        {% endblock %}
-
-        {% block javascripts %}
-            <script src="{{ asset('js/jquery.min.js') }}"></script>
-            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-            <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
-            <script>
-
-            </script>
-        {% endblock %}
+            }
+            function checkHuevo2(boton){
+                let bandera = false;
+               $('.division').each(function(){
+                   if (!$(this).hasClass('d-none') && !bandera){
+                        $('.division').eq($(this).index() + boton).removeClass('d-none');
+                        $(this).addClass('d-none');
+                        bandera=true;
+                        if( $('.division').first().is($('.division').eq($(this).index() + boton)) ){
+                            $('#back').addClass('d-none');
+                            $('#next').removeClass('d-none');
+                            $('#residente_enviar').hide();
+                        }else if ($('.division').last().is($('.division').eq($(this).index() + boton))){
+                            $('#back').removeClass('d-none');
+                            $('#next').addClass('d-none');
+                            $('#residente_enviar').show();
+                        }else {
+                            $('#back').removeClass('d-none');
+                            $('#next').removeClass('d-none');
+                            $('#residente_enviar').hide();
+                        }
+                   }
+               });
+            }
+        </script>
+{% endblock %}
 {% block body %}
     {{ parent() }}
-    <div class="container | bg-primary">
-        <div class="row justify-content-center">
-            <div class="col-10 | text-white">
-                <h1 class="mt-5 | text-center">Registro de Residentes</h1>
-            </div>
-            {{ form_start(form) }}
-            <div class="col-10 | mt-3 | bg-white | rounded">
-                <div class="form-row DatosPersonales">
-                    <div class="col-12 mt-3">
-                        <h3>Datos Personales del Residente</h3>
-                        <hr>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.nombre) }}
-                            {{ form_widget(form.nombre) }}
+    <div class="col-10">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-10 | text-white">
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.primer_apellido) }}
-                            {{ form_widget(form.primer_apellido) }}
+                    {% endfor %}
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
+                    {% endfor %}
+                    <div id="error_seccion" class="alert alert-danger alert-dismissible fade show | d-none">
+                        Compruebe que todos los campos están rellenos adecuadamente.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.segundo_apellido) }}
-                            {{ form_widget(form.segundo_apellido) }}
+                </div>
+                <div class="col-10">
+                    <h1 class="mt-5 | text-center | text-dark">Registro de Residentes</h1>
+                </div>
+                {{ form_start(form) }}
+                <div class="col-10 | col-offset-2 | mt-3 | bg-white | rounded">
+                    <div id="datosPersonales" class="form-row DatosPersonales | mb-4 | division">
+                        <div class="col-12 mt-3">
+                            <h3>Datos Personales del Residente</h3>
+                            <hr>
                         </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.dni) }}
-                            {{ form_widget(form.dni) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.num_ss) }}
-                            {{ form_widget(form.num_ss) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3 pt-0 pb-0">
-                            {{ form_label(form.fecha_nac) }}
-                            {{ form_widget(form.fecha_nac) }}
-                        </div>
-                    </div>
-                </div>  {# FIN DE DATOS PERSONALES #}
-                <div class="form-row DatosIngreso">
-                    <div class="col-12">
-                        <h3>Datos de Ingreso</h3>
-                        <hr>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.med_map) }}
-                            {{ form_widget(form.med_map) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.podologia) }}
-                            {{ form_widget(form.podologia) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.fecha_ingreso) }}
-                            {{ form_widget(form.fecha_ingreso) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-3">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.num_habitacion) }}
-                            {{ form_widget(form.num_habitacion) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-3">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.num_lav) }}
-                            {{ form_widget(form.num_lav) }}
-                        </div>
-                    </div>
-                </div>{# FIN DE DATOS INGRESO #}
-                <div class="form-row DatosMedicos">
-                    <div class="col-12 mt-3">
-                        <h3>Datos Medicos</h3>
-                        <hr>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.oxigeno) }}
-                            {{ form_widget(form.oxigeno) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.anticoagulante) }}
-                            {{ form_widget(form.anticoagulante) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.hipertension) }}
-                            {{ form_widget(form.hipertension) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.diabetes) }}
-                            {{ form_widget(form.diabetes) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.demencia) }}
-                            {{ form_widget(form.demencia) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.nivel_dependencia) }}
-                            {{ form_widget(form.nivel_dependencia) }}
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-12">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.alergias) }}
-                            {{ form_widget(form.alergias) }}
-                        </div>
-                    </div>
 
-                </div>{# FIN DE DATOS Medicos #}
-                <div class="row | justify-content-center | Enviar">
-                    <div class="col-12 text-center">
-                        <div class="form-group | mt-3">
-                            {{ form_label(form.enviar) }}
-                            {{ form_widget(form.enviar) }}
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.nombre) }}
+                                {{ form_widget(form.nombre) }}
+                                {{ form_errors(form.nombre) }}
+
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.primer_apellido) }}
+                                {{ form_widget(form.primer_apellido) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.segundo_apellido) }}
+                                {{ form_widget(form.segundo_apellido) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.dni) }}
+                                {{ form_widget(form.dni) }}
+                                <div id="dniError" class="invalid-feedback d-none">
+                                    El DNI introducido no es correcto o está repetido.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.num_ss) }}
+                                {{ form_widget(form.num_ss) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3 pt-0 pb-0">
+                                {{ form_label(form.fecha_nac) }}
+                                {{ form_widget(form.fecha_nac) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3 pt-0 pb-0">
+                                {{ form_label(form.lugar_procedencia) }}
+                                {{ form_widget(form.lugar_procedencia) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3 pt-0 pb-0">
+                                {{ form_label(form.sexo) }}
+                                {{ form_widget(form.sexo) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3 pt-0 pb-0">
+                                {{ form_label(form.estado_civil) }}
+                                {{ form_widget(form.estado_civil) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3 pt-0 pb-0">
+                                {{ form_label(form.foto) }}
+                                {{ form_widget(form.foto) }}
+                            </div>
+                        </div>
+                    </div>  {# FIN DE DATOS PERSONALES #}
+                    <div id="datosIngreso" class="form-row DatosIngreso | division | d-none">
+                        <div class="col-12">
+                            <h3>Datos del centro</h3>
+                            <hr>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.med_map) }}
+                                {{ form_widget(form.med_map) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.podologia) }}
+                                {{ form_widget(form.podologia) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.fecha_ingreso) }}
+                                {{ form_widget(form.fecha_ingreso) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3 pt-0 pb-0">
+                                {{ form_label(form.tipo_estancia) }}
+                                {{ form_widget(form.tipo_estancia) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.num_habitacion) }}
+                                {{ form_widget(form.num_habitacion) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.num_lav) }}
+                                {{ form_widget(form.num_lav) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.peluqueria) }}
+                                {{ form_widget(form.peluqueria) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.nombre_seguro) }}
+                                {{ form_widget(form.nombre_seguro) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.poliza_seguro) }}
+                                {{ form_widget(form.poliza_seguro) }}
+                            </div>
+                        </div>
+                    </div>{# FIN DE DATOS INGRESO #}
+                    <div id="datosMedicos" class="form-row DatosMedicos | division | d-none">
+                        <div class="col-12 mt-3">
+                            <h3>Historia clínica resumida</h3>
+                            <hr>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.oxigeno) }}
+                                {{ form_widget(form.oxigeno) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.anticoagulante) }}
+                                {{ form_widget(form.anticoagulante) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.hipertension) }}
+                                {{ form_widget(form.hipertension) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.diabetes) }}
+                                {{ form_widget(form.diabetes) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.demencia) }}
+                                {{ form_widget(form.demencia) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.nivel_dependencia) }}
+                                {{ form_widget(form.nivel_dependencia) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12">
+                            <div class="form-group | mt-3">
+                                {{ form_label(form.alergias) }}
+                                {{ form_widget(form.alergias) }}
+                            </div>
+                        </div>
+
+                    </div>{# FIN DE DATOS Medicos #}
+                    <div class="row | justify-content-center | botonera ">
+                        <div class="col-12 text-center">
+                            <div class="form-group | mt-3">
+                                <button id="back" type="button" class="btn btn-primary | d-none">Anterior</button>
+                                <button id="next" type="button" class="btn btn-primary">Siguiente</button>
+                                {{ form_label(form.enviar) }}
+                                {{ form_widget(form.enviar) }}
+                            </div>
                         </div>
                     </div>
                 </div>
+                {{ form_end(form) }}
             </div>
-            {{ form_end(form) }}
         </div>
     </div>
-
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
 {% endblock %}

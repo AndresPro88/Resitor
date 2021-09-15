@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Contacto
 {
+    const REGISTRO_EXITO = 'Contacto registrado correctamente';
+    const REGISTRO_ERROR = "Hubo Problemas al registrar contacto";
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -18,17 +20,17 @@ class Contacto
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Residente::class)
+     */
+    private $residente;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $nombre;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $familiar;
-
-    /**
-     * @ORM\Column(type="string", length=12)
+     * @ORM\Column(type="string", length=9, nullable=true)
      */
     private $telefono;
 
@@ -37,15 +39,47 @@ class Contacto
      */
     private $email;
 
-    //RELACIONES
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Residente", mappedBy="contacto")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $residente;
+    private $relacion;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $urgencia;
+
+    /**
+     * @return mixed
+     */
+    public function getUrgencia()
+    {
+        return $this->urgencia;
+    }
+
+    /**
+     * @param mixed $urgencia
+     */
+    public function setUrgencia($urgencia): void
+    {
+        $this->urgencia = $urgencia;
+    }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getResidente(): ?Residente
+    {
+        return $this->residente;
+    }
+
+    public function setResidente(?Residente $residente): self
+    {
+        $this->residente = $residente;
+
+        return $this;
     }
 
     public function getNombre(): ?string
@@ -60,24 +94,12 @@ class Contacto
         return $this;
     }
 
-    public function getFamiliar(): ?int
-    {
-        return $this->familiar;
-    }
-
-    public function setFamiliar(int $familiar): self
-    {
-        $this->familiar = $familiar;
-
-        return $this;
-    }
-
     public function getTelefono(): ?string
     {
         return $this->telefono;
     }
 
-    public function setTelefono(string $telefono): self
+    public function setTelefono(?string $telefono): self
     {
         $this->telefono = $telefono;
 
@@ -92,6 +114,18 @@ class Contacto
     public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getRelacion(): ?string
+    {
+        return $this->relacion;
+    }
+
+    public function setRelacion(?string $relacion): self
+    {
+        $this->relacion = $relacion;
 
         return $this;
     }

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listar Sondas{% endblock %}
+
+{% block body %}
+
+    {{ parent() }}
+    <div class="col-10">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Residente</th>
+                <th>Fecha del cambio</th>
+                <th>Tipo de sonda</th>
+                <th>Motivo</th>
+                <th>Número</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sonda in sondas %}
+                <tr>
+                    <td>{{ sonda.residente.nombre }} {{ sonda.residente.primerapellido }} {{ sonda.residente.segundoapellido }}</td>
+                    <td>{{ sonda.fechacambio| date ('y-m-d') }}</td>
+                    <td>{{ tipos [sonda.tiposonda]}}</td>
+                    <td>{{ sonda.motivo }}</td>
+                    <td>{{ sonda.numero }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
+{% endblock %}

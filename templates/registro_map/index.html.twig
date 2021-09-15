@@ -1,19 +1,82 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello RegistroMapController!{% endblock %}
+{% block title %}Registro de Medicos{% endblock %}
 
 {% block body %}
     {{ parent() }}
-    {{ form(formulario) }}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
+    <div class="col-10">
+        <div class="row mt-4">
+            <div class="col-12">
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+                {% for message in app.flashes('success_borrar') %}
+                    <div class="alert alert-success alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+                {% for message in app.flashes('error_borrar') %}
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 mt-3 mb-4">
+                    <h1>Panel de control de Médicos de Atención Primaria</h1>
+                    <hr>
+                </div>
+                <div class="col-6">
+                    <h3>Agregar Nuevo Médico Atención Primaria</h3>
+                    {{ form(formulario) }}
+                </div>
+                <div class="col-6">
+                    <h3>Borrar Médico de Atención Primaria</h3>
+                    {{ form(formulario_borrar) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h3>Listado de Medicos del centro</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Identificador</th>
+                                <th>Nombre</th>
+                                <th>Ver Pacientes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for medico in medicos %}
+                                <tr>
+                                    <td>{{ medico.id }}</td>
+                                    <td>{{ medico.nombre }}</td>
+                                    <td><buttton onclick="window.location.href='{{ path('listado_pacientes',{id:medico.id}) }}'" class="btn btn-primary">Ver Pacientes</buttton></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
-
+    </div>
 {% endblock %}
