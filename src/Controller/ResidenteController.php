@@ -128,7 +128,7 @@ class ResidenteController extends AbstractController
         //ENVIO DEL FORMULARIO DE AÑADIR CONSTANTES VITALES
         if($form_constantes->isSubmitted() ){
             if($form_constantes->isValid()){
-                if(!preg_match("/\d{2,3}\/\d{2,3}$/",$form_constantes['tension_arterial']->getData())){
+                if(!preg_match("/\d{2,3}sy\/\d{2,3}$/",$form_constantes['tension_arterial']->getData())){
                     $this->addFlash('error','El valor de Tension arterial introducido no es correcto');
                 }else{
                     $em = $this->getDoctrine()->getManager();
@@ -208,12 +208,12 @@ class ResidenteController extends AbstractController
      */
     public function consultarDni(Request $request){
         if($request->isXmlHttpRequest()){
-            $existe=false;
+            $existe=true;
             $em = $this->getDoctrine()->getManager();
             $dni = $request->request->get('dni');
             $residente = $em->getRepository(Residente::class)->findOneBy( ['dni'=>$dni]);
             if (empty($residente)){
-                $existe = true;
+                $existe = false;
             }
             return new JsonResponse(['existe' => $existe , 'dni' => $dni]);
         }else{

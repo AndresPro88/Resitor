@@ -61,6 +61,7 @@ class ResidenteType extends AbstractType
                 'choices' => [
                     'Diurna' => 0,
                     'Nocturna' => 1,
+                    'Ambos' => 2,
                 ],
                 'expanded' => true,
                 'multiple' => false,

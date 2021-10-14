@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Residente: {{ residente.nombre }} {{ residente.primerapellido }} {% endblock %}
+{% block stylesheets %}
+
+    {{ parent() }}
+
+{% endblock %}
     {% block javascripts %}
         {{ parent() }}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.1/chart.js"></script>
@@ -38,7 +43,7 @@
             function comprobarTA(){
                 let regCTA = /\d{2,3}\/\d{2,3}$/;
                 if (!$('#constantes_vitales_tension_arterial').val().match(regCTA)){
-                    $('#constantes_vitales_tension_arterial').parent().append('<div id="errorTA" class="invalid-feedback">El dato introducido debe no tiene el formato correcto XXX/XXX</div>');
+                    $('#constantes_vitales_tension_arterial').parent().append('<div id="errorTA" class="invalid-feedback">El dato introducido no tiene el formato correcto XXX/XXX</div>');
                     $('#constantes_vitales_tension_arterial').addClass('is-invalid');
                     $('#constantes_vitales_enviar').prop('disabled', true);
                 }else{
@@ -60,10 +65,13 @@
                 'demencia':['Ninguno','Alzheimer','Vascular','Cuerpos de Lewy','Frontotemporal','Mixta'],
                 'depen':['Ninguno','Grado I','Grado II, Nivel 1','Grado II, Nivel 2','Grado III, Nivel 1','Grado III, Nivel 2'],
                 'relacion':['Familiar de 1º Grado','Familiar de 2º Grado','Tutor','Pariente Lejano','Amistad'],
+                'estadoCivil':['Soltero','Casado','Separado','Divorciado','Viudo'],
+                'sexo':['Masculino','Femenino'],
+                'tipoEstancia':['Diurna','Nocturna','Ambos'],
             }
         %}
             <div class="col-10">
-                {# ERRES DEL BACKEND #}
+                {# ERRORES DEL BACKEND #}
                 {% for message in app.flashes('success') %}
                     <div class="alert alert-success alert-dismissible fade show">
                         {{ message }}
@@ -82,16 +90,45 @@
                 {% endfor %}
 
                 {# BOTONERA DEL RESIDENTE #}
-                <div class="row justify-content-center mt-3">
+                <div class="row justify-content-center | sticky-top">
                     <div class="col-12">
-                        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalSegui"><i class="fas fa-user-nurse | pr-2"></i>Añadir Seguimiento Enfermería</button>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalTratamiento"><i class="fas fa-pills | pr-2"></i>Añadir Tratamiento</button>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalConstantes"><i class="fas fa-heartbeat | pr-2"></i>Añadir Constantes Vitales</button>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalConsultaExt"><i class="fas fa-user-md | pr-2"></i>Añadir Consulta Externa</button>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalAntibiotico"><i class="fas fa-user-md | pr-2"></i>Añadir Antibioticos</button>
-                            <a href="{{ path('editar_residente',{id:residente.id}) }}" class="btn btn-primary"><i class="fas fa-edit | pr-2"></i>Editar Campos</a>
-                        </div>
+                        <nav class="navbar navbar-expand-lg navbar-dark">
+                            <a class="navbar-brand">Añadir: </a>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                                <div class="navbar-nav">
+                                    <a class="nav-item nav-link active cursor-pointer-menu-item | rounded" role="button" data-toggle="modal" data-target="#modalSegui">
+                                        <i class="fas fa-user-nurse | pr-2 "></i>Seguimiento Enfermería
+                                    </a>
+                                    <a class="nav-item nav-link active cursor-pointer-menu-item | rounded" data-toggle="modal" data-target="#modalTratamiento">
+                                        <i class="fas fa-pills | pr-2"></i>Tratamiento
+                                    </a>
+                                    <a class="nav-item nav-link active cursor-pointer-menu-item | rounded" data-toggle="modal" data-target="#modalConstantes">
+                                        <i class="fas fa-heartbeat | pr-2"></i>Constantes Vitales
+                                    </a>
+                                    <a class="nav-item nav-link active cursor-pointer-menu-item | rounded" data-toggle="modal" data-target="#modalConsultaExt">
+                                        <i class="fas fa-user-md | pr-2"></i>Consulta Externa
+                                    </a>
+                                    <a class="nav-item nav-link active cursor-pointer-menu-item | rounded" data-toggle="modal" data-target="#modalAntibiotico">
+                                        <i class="fas fa-user-md | pr-2"></i>Antibioticos
+                                    </a>
+                                    <a class="nav-item nav-link active | rounded" href="{{ path('editar_residente',{id:residente.id}) }}">
+                                        <i class="fas fa-edit | pr-2"></i>Información del Residente
+                                    </a>
+                                </div>
+                            </div>
+                        </nav>
+{#                        CODIGO DE DESHECHO
+                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">#}
+{#                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalSegui"><i class="fas fa-user-nurse | pr-2"></i>Añadir Seguimiento Enfermería</button>#}
+{#                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalTratamiento"><i class="fas fa-pills | pr-2"></i>Añadir Tratamiento</button>#}
+{#                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalConstantes"><i class="fas fa-heartbeat | pr-2"></i>Añadir Constantes Vitales</button>#}
+{#                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalConsultaExt"><i class="fas fa-user-md | pr-2"></i>Añadir Consulta Externa</button>#}
+{#                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalAntibiotico"><i class="fas fa-user-md | pr-2"></i>Añadir Antibioticos</button>#}
+{#                            <a href="{{ path('editar_residente',{id:residente.id}) }}" class="btn btn-primary"><i class="fas fa-edit | pr-2"></i>Editar Información del Residente</a>#}
+{#                        </div>#}
                     </div>
                 </div>
                 {# FIN BOTONERA DEL RESIDENTE #}
@@ -104,14 +141,21 @@
                             <p><i class="fas fa-id-card | pr-2"></i>DNI: {{ residente.dni }}</p>
                             <p><i class="far fa-id-card | pr-2"></i>Número Seguridad Social: {{ residente.numss }}</p>
                             <p><i class="fas fa-calendar-alt | pr-2"></i>Fecha de Nacimiento: {{ residente.fechanac | date ('d-m-Y') }}</p>
+                            <p><i class="fas fa-venus-mars | pr-2"></i>Genero: {{ arrayRelleno['sexo'][residente.sexo] }}</p>
+                            <p><i class="fas fa-ring | pr-2"></i>Estado Civil: {{ arrayRelleno['estadoCivil'][residente.estadocivil] }}</p>
+                            <p><i class="fas fa-map-marker-alt | pr-2"></i>Lugar de Procedencia: {{ residente.lugarprocedencia}}</p>
+                            <p><i class="fas fa-hotel | pr-2"></i>Tipo de Estancia: {{ arrayRelleno['tipoEstancia'][residente.tipoestancia] }}</p>
                         </div>
                         <div class="col-4 | mt-3">
                             <h5>Datos del ingreso</h5>
                             <p><i class="far fa-calendar-alt | pr-2"></i>Fecha de Ingreso: {{ residente.fechaingreso | date ('d-m-Y') }}</p>
                             <p><i class="fas fa-user-md | pr-2"></i>Médico Atención Primaria: {{ residente.medmap.nombre }}</p>
                             <p><i class="fas fa-shoe-prints | pr-2"></i>Podólogo: {{ residente.podologia.nombre }}</p>
-                            <p><i class="fas fa-house-user | pr-2"></i>Número de habitación: {{ residente.numhabitacion }}</p>
-                            <p><i class="fas fa-tshirt | pr-2"></i>Número de lavanderia: {{ residente.numlav }}</p>
+                            <p><i class="fas fa-house-user | pr-2"></i>Número de Habitación: {{ residente.numhabitacion }}</p>
+                            <p><i class="fas fa-tshirt | pr-2"></i>Número de Lavanderia: {{ residente.numlav }}</p>
+                            <p><i class="fas fa-cut | pr-2"></i>Número de Peluquería: {{ residente.peluqueria }}</p>
+                            <p><i class="fas fa-building | pr-2"></i>Nombre del Seguro: {{ residente.nombreseguro }}</p>
+                            <p><i class="fas fa-house-damage | pr-2"></i>Número de la Póliza: {{ residente.polizaseguro}}</p>
                         </div>
                         <div class="col-4 | mt-3">
                             <h5>Datos Médicos</h5>
@@ -121,8 +165,10 @@
                             <p><i class="fas fa-cubes | pr-2"></i>Diabetes: {{ arrayRelleno['diabetes'][residente.diabetes]}} </p>
                             <p><i class="fas fa-brain | pr-2"></i>Demencia: {{ arrayRelleno['demencia'][residente.demencia] }}</p>
                             <p><i class="fas fa-wheelchair | pr-2"></i>Nivel de dependencia: {{ arrayRelleno['depen'][residente.niveldependencia] }}</p>
+                            <p><i class="fas fa-allergies"></i>Alergias Conocidas: {{ residente.alergias }}</p>
                         </div>
                     </div>
+                    <hr/>
                     <div class="row d-md-none">
                          {# ACORDEON PARA DISPOSITIVOS MOVILES #}
                         <div class="col-12">
@@ -238,6 +284,7 @@
                     </div>
                     {# FIN DEL LISTADO DE TRATAMIENTOS #}
                     {# LISTADO DE CONSULTAS EXTERNAS DEL RESIDENTE #}
+                    <hr/>
                     <div class="row">
                         <div class="col-12">
                             <h3>Consultas Externas del Residente</h3>

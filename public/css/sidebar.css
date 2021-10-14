@@ -5,7 +5,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-/* MENU LATERAL DERECHO*/
+/* MENU NAVAR TOP VER RESIDENTE*/
     @media (max-width: 1000px) {
         button{
             font-size: 14px;
@@ -17,7 +17,11 @@
             display:block !important;
         }
     }
-/* FIN MENU LATERAL DERECHO*/
+
+.navbar navbar-expand-lg{
+    background-color: #4dd9c1;
+}
+/* FIN MENU NAVAR TOP VER RESIDENTE*/
 
     .card{
         background: #4dd9c1;

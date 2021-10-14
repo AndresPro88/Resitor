@@ -19,16 +19,16 @@
             <script src="https://kit.fontawesome.com/c9e8ddca18.js" crossorigin="anonymous"></script>
             <script>
                 $(document).ready(function () {
-                    redimensionar();
+                    reSizeMenu();
                     $(window).resize(function(){
-                        redimensionar();
+                        reSizeMenu();
                     });
 
                     if (window.history.replaceState) { // verificamos disponibilidad
                         window.history.replaceState(null, null, window.location.href);
                     }
                 });
-                function redimensionar(){
+                function reSizeMenu(){
                     if($(window).width() < 1000){
                         $('#sidebar').addClass('active');
                         $('#logo').html('R');
@@ -49,9 +49,10 @@
                     <div class="col-2">
                         <!-- Sidebar -->
                         <div class=" h-100" >
-                            <nav id="sidebar" class="shadow-sm | h-100 w-100">
-                                <h1><span id="logo" class="logo">R</span></h1>
-                                <ul class="list-unstyled components mb-5">
+                            <nav id="sidebar" class="shadow-sm | w-100  h-100 | ">
+
+                                <ul class="list-unstyled components mb-5 | sticky-top">
+                                    <h1><span id="logo" class="logo">R</span></h1>
                                     <li class="shadow-sm"><a href="{{ path('dashboard') }}"><span class="fa fa-home"></span>Panel de Control</a></li>
                                     <li class="shadow-sm">
                                         <a href="#addSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><span class="fa fa-user"></span>Agregar</a>

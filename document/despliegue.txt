@@ -1,0 +1,29 @@
+Para el despliegue de la aplicación he elegido utilizar coo sitema operativo Ubuntu, que es el que mas facilidades tiene para trabajar con Docker, un contenedor de sevicios realmente avanzado.
+ Previamente intenté utilizar el WSL2 que incluye windows y docker en su version de escritorio para windows, pero me dio problemas a la hora de implementar los scritps
+ de configuracion de las distintas maquinas, debido a una serie de diferencias entre las rutas reales de la aplicacion y de aquellas incluidas en los scripts, que no supe resolver adecuadamente
+ . Asi que instale Ubuntu en su ultima version y a traves de una serie de scripts,
+ de los cuales inserto las capturas como datos adjuntos, se encargará de levantar los siguientes servicios necesarios:
+
+ -Servidor Nginx: Se encarga de gestionar el trafico http y resolver las distintas peticiones que se hagan a la aplicacion, asi como de asignar un puertos de escucha necesarios par los
+ servicios.
+ -Servidor PHP: El encargado de ejecutar el código PHP del framework y de comprender los distintos comandos de composer que se utilizan para descargar los Bundles necesarios
+ para el funcionamiento de la aplicación. He descargado la ultima versión compatible con Symfony.
+ -Servidor MYSQL: En este caso lo he elegido por la familiaridad qu tengo al a haber trabajado con el durante el ultimo año, al mismo tiempo se adapta bien al modelo relacional
+ de la aplicación y cubre las necesidades de la misma. Pero podria haber elegido cualquier otra base de datos relacional, como PostgreSQL o incluso una no relacional, como MongoDB.
+
+ El funcionamiento de Docker es complejo y sencillo a la vez, nosotros configuramos en un archivo Docker-composer.yml los servicios que vamos a descargar. Podemos indicar rutas hacia los
+ diferentes archivos de configuración, declarar las redes a las que vana  tener acceso (estas redes cirtuales son internas de Docker, es para que los servicios esten conectados entre ellos).
+ (INSERTAR EXPLICACION DE LOS VOLUMENES)
+ Para cada uno de los servicios hay que detallar rutas, donde a lojaremos los archivos de scripts de configuracion, hay que entender que docker levanta una maquina virtual e
+  independiente con bnase linux para cada uno de los servicios detallados. Y a través de los scripts de configuración que hemos indicado realizamos las modificaciones necesarias.
+  En el caso de Nginx, vamos a sustituri el archivo conf.d por uno que hemos preparado, para asignarle los puertos de escucha, por ejemplo.
+  Para MYSQL, estableceremos una serie de directrices, como el nombre de la base de datos, usuario, contraseña y modos de autenticación.
+  Y para PHP toda uina ristra de scripts, para que se conecte por ejemplo a traves de curl a la web de composer y descargue su ultima version, composer a su vez se va aencargar
+  de descargar los paquete sde symfony y todos los Bundle que necesitemos, asi como de otras cuestiones relacionadas, comopor ejemplo hacer uso del ORM que conecta el software
+  con el modelo de BBDD.
+
+  Instalación de Symfony: UNa vez actriva la maquina php entramos en ella, a taves del comando:
+  docker exec -it nombre_de_la_maquina bash
+  Lo que nos permite acceder al bash de la maquina ejecutada. Para relizar la instalacion de , una vez descargado composer, basta con introducir el comando:
+  symfony new-symfony ruta_de_la_instalacion, en caso que la carpeta este vacia, proceder con la instalacion del framework.
+  Una vez instalado, levantamos el servicio de MYSQL, en caso de que no lo hagamos hecho con antelacion. Y nos ponemos "al lio".
