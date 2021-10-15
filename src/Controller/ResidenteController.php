@@ -17,10 +17,12 @@ use App\Form\ResidenteType;
 use App\Form\SegEnfermeriaType;
 use App\Form\TratamientoType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 class ResidenteController extends AbstractController
@@ -169,7 +171,7 @@ class ResidenteController extends AbstractController
     /**
      * @Route("/editar_residente/{id}", name="editar_residente")
      */
-    public function editarResidente($id,Request $request){
+    public function editarResidente($id,Request $request,SluggerInterface $slugger){
 
         $residente = $this->getDoctrine()->getRepository(Residente::class)->find($id);
 
@@ -178,6 +180,21 @@ class ResidenteController extends AbstractController
 
         if($form_editar->isSubmitted()) {
             if ($form_editar->isValid()) {
+                $brochureFile = $form_editar->get('foto')->getData();
+                if ($brochureFile) {
+                    $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+                    try {
+                        $brochureFile->move(
+                            $this->getParameter('imagenes_directory'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                        throw new \Exception('¡Ups! Ha ocurrido un error, sorry');
+                    }
+                    $residente->setFoto($newFilename);
+                }
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
                 $this->addFlash('success', 'Residente editado correctamente');
