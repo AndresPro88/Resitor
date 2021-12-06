@@ -34,25 +34,21 @@ class TratamientoController extends AbstractController
         $form_editar_tratamiento->handleRequest($request);
         if($form_editar_tratamiento->isSubmitted()) {
             if ($form_editar_tratamiento->isValid()) {
-                if(in_array(0,$form_editar_tratamiento['horario']->getData())){
-                    $tratamiento->setDesayuno(1);
-                }else{
-                    $tratamiento->setDesayuno(0);
-                }
-                if (in_array(1,$form_editar_tratamiento['horario']->getData())){
-                    $tratamiento->setComida(1);
-                }else{
-                    $tratamiento->setComida(0);
-                }
-                if(in_array(2,$form_editar_tratamiento['horario']->getData())){
-                    $tratamiento->setCena(1);
-                }else{
-                    $tratamiento->setCena(0);
-                }
-                if (in_array(3,$form_editar_tratamiento['horario']->getData())){
-                    $tratamiento->setRecena(1);
-                }else{
-                    $tratamiento->setRecena(0);
+                foreach ($form_editar_tratamiento['horario']->getData() as $horario) {
+                    switch ($horario) {
+                        case 0:
+                            $tratamiento->setDesayuno(1);
+                            break;
+                        case 1:
+                            $tratamiento->setComida(1);
+                            break;
+                        case 2:
+                            $tratamiento->setCena(1);
+                            break;
+                        case 3:
+                            $tratamiento->setRecena(1);
+                            break;
+                    }
                 }
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();

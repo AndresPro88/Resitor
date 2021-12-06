@@ -36,9 +36,14 @@ class ConstantesVitales implements \JsonSerializable
     private $glucemia;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $tension_arterial;
+    private $tension_arterial_sistolica;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $tension_arterial_diastolica;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -106,14 +111,26 @@ class ConstantesVitales implements \JsonSerializable
         return $this;
     }
 
-    public function getTensionArterial()
+    public function getTensionArterialSistolica(): ?int
     {
-        return $this->tension_arterial;
+        return $this->tension_arterial_sistolica;
     }
 
-    public function setTensionArterial($tension_arterial): void
+    public function setTensionArterialSistolica(?int $tension_arterial_sistolica): self
     {
-        $this->tension_arterial = $tension_arterial;
+        $this->tension_arterial_sistolica = $tension_arterial_sistolica;
+        return $this;
+    }
+
+    public function getTensionArterialDiastolica(): ?int
+    {
+        return $this->tension_arterial_diastolica;
+    }
+
+    public function setTensionArterialDiastolica(?int $tension_arterial_diastolica): self
+    {
+        $this->tension_arterial_diastolica = $tension_arterial_diastolica;
+        return $this;
     }
 
     public function getFrecuenciaCardiaca(): ?int
@@ -180,7 +197,8 @@ class ConstantesVitales implements \JsonSerializable
             'residente' => $this->residente->getId(),
             'fecha_cons'=> $this->fecha_cons ,
             'glucemia' => $this->glucemia,
-            'tension_arterial' => $this->tension_arterial,
+            'tension_arterial_sistolica' => $this->tension_arterial_sistolica,
+            'tension_arterial_diastolica' => $this->tension_arterial_diastolica,
             'peso'=> $this->peso,
             'saturacion_oxigeno' => $this->saturacion_oxigeno,
             'temperatura_corporal' => $this->temperatura_corporal,

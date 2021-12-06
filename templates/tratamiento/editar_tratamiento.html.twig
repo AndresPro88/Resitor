@@ -8,6 +8,17 @@
             <script>
 
                 $(document).ready(function(){
+                    $('#tratamiento_tipo_medicamento').val({{ tratamiento.tipomedicamento }});
+                    //POPULANDO FECHAS
+                    fechaIni = '{{tratamiento.fechainicio | date('yy-m-d')}}'.split('-');
+                    $('#tratamiento_fecha_inicio_month').val(fechaIni[1].replace(/^(0+)/g, ''));
+                    $('#tratamiento_fecha_inicio_day').val(fechaIni[2].replace(/^(0+)/g, ''));
+                    $('#tratamiento_fecha_inicio_year').val(fechaIni[0]);
+                    fechaFin = '{{tratamiento.fechafin | date('yy-m-d')}}'.split('-');
+                    $('#tratamiento_fecha_fin_month').val(fechaFin[1].replace(/^(0+)/g, ''));
+                    $('#tratamiento_fecha_fin_day').val(fechaFin[2].replace(/^(0+)/g, ''));
+                    $('#tratamiento_fecha_fin_year').val(fechaFin[0]);
+                    //POPULANDO HORARIOS
                     if({{ tratamiento.desayuno }} == 1){
                         $('#tratamiento_horario_0').prop('checked',true);
                     }
@@ -72,6 +83,24 @@
                         <div class="form-group | mt-3">
                             {{ form_label(form_editar_tratamiento.medicamento) }}
                             {{ form_widget(form_editar_tratamiento.medicamento,{value:tratamiento.medicamento}) }}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="form-group | mt-3">
+                            {{ form_label(form_editar_tratamiento.tipo_medicamento) }}
+                            {{ form_widget(form_editar_tratamiento.tipo_medicamento) }}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="form-group | mt-3">
+                            {{ form_label(form_editar_tratamiento.fecha_inicio) }}
+                            {{ form_widget(form_editar_tratamiento.fecha_inicio) }}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="form-group | mt-3">
+                            {{ form_label(form_editar_tratamiento.fecha_fin) }}
+                            {{ form_widget(form_editar_tratamiento.fecha_fin) }}
                         </div>
                     </div>
                     <div class="col-12 col-md-4">

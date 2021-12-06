@@ -17,7 +17,8 @@ class ConstantesVitalesType extends AbstractType
     {
         $builder
             ->add('glucemia')
-            ->add('tension_arterial')
+            ->add('tension_arterial_sistolica')
+            ->add('tension_arterial_diastolica')
             ->add('frecuencia_cardiaca')
             ->add('frecuencia_respiratoria')
             ->add('saturacion_oxigeno')

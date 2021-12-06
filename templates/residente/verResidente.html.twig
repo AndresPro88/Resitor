@@ -66,29 +66,33 @@
                 'depen':['Ninguno','Grado I','Grado II, Nivel 1','Grado II, Nivel 2','Grado III, Nivel 1','Grado III, Nivel 2'],
                 'relacion':['Familiar de 1º Grado','Familiar de 2º Grado','Tutor','Pariente Lejano','Amistad'],
                 'estadoCivil':['Soltero','Casado','Separado','Divorciado','Viudo'],
+                'tipo_medicamento': ['Analgésicos' ,'Antiácidos','Antialérgicos','Antidiarreicos','Antibióticos','Antifúngicos','Antivirales','Antiparasitarios','Antiinflamatorios','Antitusivos','Laxantes','Mucolíticos'],
                 'sexo':['Masculino','Femenino'],
                 'tipoEstancia':['Diurna','Nocturna','Ambos'],
             }
         %}
             <div class="col-10">
                 {# ERRORES DEL BACKEND #}
-                {% for message in app.flashes('success') %}
-                    <div class="alert alert-success alert-dismissible fade show">
-                        {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                <div class="row">
+                    <div class="col-12">
+                        {% for message in app.flashes('success') %}
+                            <div class="alert alert-success alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                        {% for message in app.flashes('error') %}
+                            <div class="alert alert-danger alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
-                {% for message in app.flashes('error') %}
-                    <div class="alert alert-danger alert-dismissible fade show">
-                        {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% endfor %}
-
+                </div>
                 {# BOTONERA DEL RESIDENTE #}
                 <div class="row justify-content-center | sticky-top">
                     <div class="col-12">
@@ -120,22 +124,13 @@
                                 </div>
                             </div>
                         </nav>
-{#                        CODIGO DE DESHECHO
-                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">#}
-{#                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalSegui"><i class="fas fa-user-nurse | pr-2"></i>Añadir Seguimiento Enfermería</button>#}
-{#                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalTratamiento"><i class="fas fa-pills | pr-2"></i>Añadir Tratamiento</button>#}
-{#                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalConstantes"><i class="fas fa-heartbeat | pr-2"></i>Añadir Constantes Vitales</button>#}
-{#                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalConsultaExt"><i class="fas fa-user-md | pr-2"></i>Añadir Consulta Externa</button>#}
-{#                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalAntibiotico"><i class="fas fa-user-md | pr-2"></i>Añadir Antibioticos</button>#}
-{#                            <a href="{{ path('editar_residente',{id:residente.id}) }}" class="btn btn-primary"><i class="fas fa-edit | pr-2"></i>Editar Información del Residente</a>#}
-{#                        </div>#}
                     </div>
                 </div>
                 {# FIN BOTONERA DEL RESIDENTE #}
                 <div class="contenedor | bg-white rounded p-3 m-4">
                     <h3>Información del residente</h3>
-                    <div class="row d-none d-md-flex | justify-content-center | mt-4 ">
-                        <div class="col-4 | mt-3">
+                    <div class="row  | justify-content-center | mt-4 ">
+                        <div class="col-12 col-lg-4 | mt-3 | justify-content-center">
                             <h5>Datos personales</h5>
                             <p><i class="fa fa-user | pr-2"></i>Nombre: {{ residente.nombre }} {{ residente.primerapellido }} {{ residente.segundoapellido }}</p>
                             <p><i class="fas fa-id-card | pr-2"></i>DNI: {{ residente.dni }}</p>
@@ -169,66 +164,66 @@
                         </div>
                     </div>
                     <hr/>
-                    <div class="row d-md-none">
-                         {# ACORDEON PARA DISPOSITIVOS MOVILES #}
-                        <div class="col-12">
-                            <div id="accordion">
-                                <div class="card">
-                                    <div class="card-header" id="headingOne">
-                                        <h5 class="mb-0 | bg-primary"  data-toggle="collapse" data-target="#datosPersonales" aria-expanded="false" aria-controls="datosPersonales">
-                                            <button class="btn btn-link | text-white text-center | w-100">
-                                                Datos Personales
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="datosPersonales" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                                        <div class="card-body">
-                                            <p><i class="fas fa-id-card | pr-2"></i> DNI: {{ residente.dni }}</p>
-                                            <p><i class="far fa-id-card | pr-2"></i>Número Seguridad Social: {{ residente.numss }}</p>
-                                            <p><i class="fas fa-calendar-alt | pr-2"></i>Fecha de Nacimiento: {{ residente.fechanac | date ('d-m-Y') }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header" id="headingTwo">
-                                        <h5 class="mb-0 | bg-primary">
-                                            <button class="btn btn-link collapsed | text-white text-center | w-100" data-toggle="collapse" data-target="#datosIngreso" aria-expanded="false" aria-controls="datosIngreso">
-                                                Datos del ingreso
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="datosIngreso" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                                        <div class="card-body">
-                                            <p><i class="far fa-calendar-alt | pr-2"></i>Fecha de Ingreso: {{ residente.fechaingreso | date ('d-m-Y') }}</p>
-                                            <p><i class="fas fa-user-md | pr-2"></i>Médico Atención Primaria: {{ residente.medmap.nombre }}</p>
-                                            <p><i class="fas fa-shoe-prints | pr-2"></i>Podólogo: {{ residente.podologia.nombre }}</p>
-                                            <p><i class="fas fa-house-user | pr-2"></i>Número de habitación: {{ residente.numhabitacion }}</p>
-                                            <p><i class="fas fa-tshirt | pr-2"></i>Número de lavanderia: {{ residente.numlav }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header" id="headingThree">
-                                        <h5 class="mb-0 | bg-primary">
-                                            <button class="btn btn-link collapsed | text-white text-center | w-100" data-toggle="collapse" data-target="#datosMedicos" aria-expanded="false" aria-controls="datosMedicos">
-                                                Datos médicos
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="datosMedicos" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                                        <div class="card-body">
-                                            <p><i class="fas fa-lungs | pr-2"></i>Oxigeno: {{ arrayRelleno['oxigeno'][residente.oxigeno] }}</p>
-                                            <p><i class="fas fa-tint | pr-2"></i>Anticoagulantes: {{arrayRelleno['antico'][residente.anticoagulante] }}</p>
-                                            <p><i class="fas fa-heartbeat | pr-2"></i>Hipertensión: {{ arrayRelleno['hipertension'][residente.hipertension] }}</p>
-                                            <p><i class="fas fa-cubes | pr-2"></i>Diabetes: {{ arrayRelleno['diabetes'][residente.diabetes]}} </p>
-                                            <p><i class="fas fa-brain | pr-2"></i>Demencia: {{ arrayRelleno['demencia'][residente.demencia] }}</p>
-                                            <p><i class="fas fa-wheelchair | pr-2"></i>Nivel de dependencia: {{ arrayRelleno['depen'][residente.niveldependencia] }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>{# FIN DEL ACORDEON #}
+{#                    <div class="row d-md-none">#}
+{#                         #}{# ACORDEON PARA DISPOSITIVOS MOVILES #}
+{#                        <div class="col-12">#}
+{#                            <div id="accordion">#}
+{#                                <div class="card">#}
+{#                                    <div class="card-header" id="headingOne">#}
+{#                                        <h5 class="mb-0 | bg-primary"  data-toggle="collapse" data-target="#datosPersonales" aria-expanded="false" aria-controls="datosPersonales">#}
+{#                                            <button class="btn btn-link | text-white text-center | w-100">#}
+{#                                                Datos Personales#}
+{#                                            </button>#}
+{#                                        </h5>#}
+{#                                    </div>#}
+{#                                    <div id="datosPersonales" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">#}
+{#                                        <div class="card-body">#}
+{#                                            <p><i class="fas fa-id-card | pr-2"></i> DNI: {{ residente.dni }}</p>#}
+{#                                            <p><i class="far fa-id-card | pr-2"></i>Número Seguridad Social: {{ residente.numss }}</p>#}
+{#                                            <p><i class="fas fa-calendar-alt | pr-2"></i>Fecha de Nacimiento: {{ residente.fechanac | date ('d-m-Y') }}</p>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="card">#}
+{#                                    <div class="card-header" id="headingTwo">#}
+{#                                        <h5 class="mb-0 | bg-primary">#}
+{#                                            <button class="btn btn-link collapsed | text-white text-center | w-100" data-toggle="collapse" data-target="#datosIngreso" aria-expanded="false" aria-controls="datosIngreso">#}
+{#                                                Datos del ingreso#}
+{#                                            </button>#}
+{#                                        </h5>#}
+{#                                    </div>#}
+{#                                    <div id="datosIngreso" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">#}
+{#                                        <div class="card-body">#}
+{#                                            <p><i class="far fa-calendar-alt | pr-2"></i>Fecha de Ingreso: {{ residente.fechaingreso | date ('d-m-Y') }}</p>#}
+{#                                            <p><i class="fas fa-user-md | pr-2"></i>Médico Atención Primaria: {{ residente.medmap.nombre }}</p>#}
+{#                                            <p><i class="fas fa-shoe-prints | pr-2"></i>Podólogo: {{ residente.podologia.nombre }}</p>#}
+{#                                            <p><i class="fas fa-house-user | pr-2"></i>Número de habitación: {{ residente.numhabitacion }}</p>#}
+{#                                            <p><i class="fas fa-tshirt | pr-2"></i>Número de lavanderia: {{ residente.numlav }}</p>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="card">#}
+{#                                    <div class="card-header" id="headingThree">#}
+{#                                        <h5 class="mb-0 | bg-primary">#}
+{#                                            <button class="btn btn-link collapsed | text-white text-center | w-100" data-toggle="collapse" data-target="#datosMedicos" aria-expanded="false" aria-controls="datosMedicos">#}
+{#                                                Datos médicos#}
+{#                                            </button>#}
+{#                                        </h5>#}
+{#                                    </div>#}
+{#                                    <div id="datosMedicos" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">#}
+{#                                        <div class="card-body">#}
+{#                                            <p><i class="fas fa-lungs | pr-2"></i>Oxigeno: {{ arrayRelleno['oxigeno'][residente.oxigeno] }}</p>#}
+{#                                            <p><i class="fas fa-tint | pr-2"></i>Anticoagulantes: {{arrayRelleno['antico'][residente.anticoagulante] }}</p>#}
+{#                                            <p><i class="fas fa-heartbeat | pr-2"></i>Hipertensión: {{ arrayRelleno['hipertension'][residente.hipertension] }}</p>#}
+{#                                            <p><i class="fas fa-cubes | pr-2"></i>Diabetes: {{ arrayRelleno['diabetes'][residente.diabetes]}} </p>#}
+{#                                            <p><i class="fas fa-brain | pr-2"></i>Demencia: {{ arrayRelleno['demencia'][residente.demencia] }}</p>#}
+{#                                            <p><i class="fas fa-wheelchair | pr-2"></i>Nivel de dependencia: {{ arrayRelleno['depen'][residente.niveldependencia] }}</p>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}{# FIN DEL ACORDEON #}
                     {# LISTADO DE TRATAMIENTOS #}
                     <div class="row">
                         <div class="col-12">
@@ -236,8 +231,10 @@
                             <table id="collapseTratamientos" class="collapse table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Fecha</th>
+                                        <th>Fecha de inicio</th>
+                                        <th>Fecha de fin</th>
                                         <th>Medicamento</th>
+                                        <th>Tipo de Medicamento</th>
                                         <th>Desayuno</th>
                                         <th>Comida</th>
                                         <th>Cena</th>
@@ -251,8 +248,10 @@
                                 {% for tratamiento in residente.getTratamientos %}
                                     {% if tratamiento.actual == true %}
                                         <tr>
-                                            <td>{{ tratamiento.fecha | date ('d-m-Y') }}</td>
+                                            <td>{{ tratamiento.fechainicio | date ('d-m-Y') }}</td>
+                                            <td>{{ tratamiento.fechafin | date ('d-m-Y') }}</td>
                                             <td>{{ tratamiento.medicamento }}</td>
+                                            <td>{{ arrayRelleno['tipo_medicamento'][tratamiento.tipomedicamento] }}</td>
                                             {% if tratamiento.desayuno == 0 %}
                                                 <td> No </td>
                                             {% else %}
@@ -428,7 +427,7 @@
     </div>
     <!-- Modal HISTORIAL TRATAMIENTO-->
     <div class="modal fade w-100" id="modalHistorialTratamientos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5>Historial Tratamientos del residente</h5>
@@ -437,18 +436,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
                     <table class="table table-striped w-100">
                         <thead>
                             <tr>
-                                <th>Fecha</th><th>Medicamento</th><th>Desayuno</th><th>Comida</th><th>Cena</th><th>Recena</th><th>Observaciones</th><th>Actual</th>
+                                <th>Fecha de Inicio</th><th>Fecha Fin</th><th>Medicamento</th><th>Tipo de Medicamento</th><th>Desayuno</th><th>Comida</th><th>Cena</th><th>Recena</th><th>Observaciones</th><th>Actual</th>
                             </tr>
                         </thead>
                         <tbody>
                         {% for tratamiento in residente.getTratamientos|sort((a, b) => b.actual <=> a.actual) %}
                             <tr>
-                                <td>{{ tratamiento.fecha | date ('d-m-Y') }}</td>
+                                <td>{{ tratamiento.fechainicio | date ('d-m-Y') }}</td>
+                                <td>{{ tratamiento.fechafin | date ('d-m-Y') }}</td>
                                 <td>{{ tratamiento.medicamento }}</td>
+                                <td>{{ arrayRelleno['tipo_medicamento'][tratamiento.tipomedicamento] }}</td>
                                 {% if tratamiento.desayuno == 0 %}
                                     <td> No </td>
                                 {% else %}

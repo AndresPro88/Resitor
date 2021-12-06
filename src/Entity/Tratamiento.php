@@ -32,9 +32,18 @@ class Tratamiento
     private $medicamento;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="integer")
      */
-    private $fecha;
+    private $tipo_medicamento;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $fecha_inicio;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $fecha_fin;
 
     /**
      * @ORM\Column(type="integer")
@@ -65,6 +74,24 @@ class Tratamiento
      * @ORM\Column(type="boolean")
      */
     private $actual;
+
+    /**
+     * Tratamiento constructor.
+     */
+    public function __construct()
+    {
+        $this->desayuno = 0;
+        $this->comida = 0;
+        $this->cena = 0;
+        $this->recena = 0;
+    }
+
+    public function getTipoMedicamento(): ?string
+    {
+        return $this->tipo_medicamento;
+    }
+
+
 
     public function getId(): ?int
     {
@@ -107,6 +134,8 @@ class Tratamiento
         return $this;
     }
 
+
+
     public function getComida(): ?int
     {
         return $this->comida;
@@ -130,7 +159,11 @@ class Tratamiento
 
         return $this;
     }
-
+    public function setTipoMedicamento(int $tipo_medicamento): self
+    {
+        $this->tipo_medicamento = $tipo_medicamento;
+        return $this;
+    }
     public function getRecena(): ?int
     {
         return $this->recena;
@@ -146,17 +179,34 @@ class Tratamiento
     /**
      * @return mixed
      */
-    public function getFecha(): ?\DateTimeInterface
+    public function getFechaInicio(): ?\DateTimeInterface
     {
-        return $this->fecha;
+        return $this->fecha_inicio;
     }
 
     /**
-     * @param mixed $fecha
+     * @return mixed
      */
-    public function setFecha(\DateTimeInterface $fecha): self
+    public function getFechaFin(): ?\DateTimeInterface
     {
-        $this->fecha = $fecha;
+        return $this->fecha_fin;
+    }
+
+    /**
+     * @param mixed $fecha_fin
+     */
+    public function setFechaFin(\DateTimeInterface $fecha_fin): self
+    {
+        $this->fecha_fin = $fecha_fin;
+        return $this;
+    }
+
+    /**
+     * @param mixed $fecha_inicio
+     */
+    public function setFechaInicio(\DateTimeInterface $fecha_inicio): self
+    {
+        $this->fecha_inicio = $fecha_inicio;
         return $this;
     }
 

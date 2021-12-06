@@ -4,16 +4,18 @@ function init (canvas){
     context.drawImage(img, 0, 0, cw2, ch2);
 }
 function pintarChar(ctotales){
-    var arrayFechas = [];
-    var arrayDatosGlucemia = [];
-    var arrayDatosPeso= [];
-    var arrayDatosTA= [];
-    var arrayDatosSO= [];
+    let arrayFechas = [];
+    let arrayDatosGlucemia = [];
+    let arrayDatosPeso= [];
+    let arrayDatosTASIS= [];
+    let arrayDatosTADIAS= [];
+    let arrayDatosSO= [];
     for (let i = 0; i < ctotales.length; i++) {
         //SUMANDO VALORES A LOS ARRAY
         arrayDatosGlucemia.push(ctotales[i]['glucemia']);
         arrayDatosPeso.push(ctotales[i]['peso']);
-        arrayDatosTA.push(ctotales[i]['tension_arterial']);
+        arrayDatosTASIS.push(ctotales[i]['tension_arterial_sistolica']);
+        arrayDatosTADIAS.push(ctotales[i]['tension_arterial_diastolica']);
         arrayDatosSO.push(ctotales[i]['saturacion_oxigeno']);
         fecha = ctotales[i]['fecha_cons']['date'];
         arrayFechas.push(fecha.split(" ")[0]);
@@ -41,12 +43,20 @@ function pintarChar(ctotales){
                     borderColor:'rgb(33,1,55)'
                 },
                 {
-                    label:'Tension Arterial',
-                    data:arrayDatosTA,
+                    label:'Tension Arterial Sistólica',
+                    data:arrayDatosTASIS,
                     backgroundColor:[
                         'rgb(77,12,155)',
                     ],
                     borderColor:'rgb(77,12,155)'
+                },
+                {
+                    label:'Tension Arterial Diastólica',
+                    data:arrayDatosTADIAS,
+                    backgroundColor:[
+                        'rgb(238,49,228)',
+                    ],
+                    borderColor:'rgb(79,125,155)'
                 },
                 {
                     label:'Saturacion de Oxigeno en sangre',

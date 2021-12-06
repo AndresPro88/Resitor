@@ -71,6 +71,7 @@ class ResidenteController extends AbstractController
         //ENVIO DE FORMULARIO DE ANTIBIOTICO
         if($form_antibiotico->isSubmitted() ){
             if($form_antibiotico->isValid()){
+                //EXPORTAR A SERVICIO $serviciosResidente->saveAntibiotico($antibiotico,$residente);
                 $em = $this->getDoctrine()->getManager();
                 $antibiotico->setResidente($residente);
                 $em->persist($antibiotico);
@@ -85,28 +86,44 @@ class ResidenteController extends AbstractController
             if($form_tratamiento->isValid()){
                 $em = $this->getDoctrine()->getManager();
                 $tratamiento->setResidente($residente);
-                $tratamiento->setFecha(new \DateTime());
+                $tratamiento->setFechaInicio(new \DateTime());
                 //$tratamiento->setHorario(implode(",",$form_tratamiento['horario']->getData()));
-                if(in_array(0,$form_tratamiento['horario']->getData())){
-                    $tratamiento->setDesayuno(1);
-                }else{
-                    $tratamiento->setDesayuno(0);
+                foreach ($form_tratamiento['horario']->getData() as $horario) {
+                    switch ($horario) {
+                        case 0:
+                            $tratamiento->setDesayuno(1);
+                            break;
+                        case 1:
+                            $tratamiento->setComida(1);
+                            break;
+                        case 2:
+                            $tratamiento->setCena(1);
+                            break;
+                        case 3:
+                            $tratamiento->setRecena(1);
+                            break;
+                    }
                 }
-                if (in_array(1,$form_tratamiento['horario']->getData())){
-                    $tratamiento->setComida(1);
-                }else{
-                    $tratamiento->setComida(0);
-                }
-                if(in_array(2,$form_tratamiento['horario']->getData())){
-                    $tratamiento->setCena(1);
-                }else{
-                    $tratamiento->setCena(0);
-                }
-                if (in_array(3,$form_tratamiento['horario']->getData())){
-                    $tratamiento->setRecena(1);
-                }else{
-                    $tratamiento->setRecena(0);
-                }
+//                if(in_array(0,$form_tratamiento['horario']->getData())){
+//                    $tratamiento->setDesayuno(1);
+//                }else{
+//                    $tratamiento->setDesayuno(0);
+//                }
+//                if (in_array(1,$form_tratamiento['horario']->getData())){
+//                    $tratamiento->setComida(1);
+//                }else{
+//                    $tratamiento->setComida(0);
+//                }
+//                if(in_array(2,$form_tratamiento['horario']->getData())){
+//                    $tratamiento->setCena(1);
+//                }else{
+//                    $tratamiento->setCena(0);
+//                }
+//                if (in_array(3,$form_tratamiento['horario']->getData())){
+//                    $tratamiento->setRecena(1);
+//                }else{
+//                    $tratamiento->setRecena(0);
+//                }
                 $em->persist($tratamiento);
                 $em->flush();
                 $this->addFlash('success_tratamiento',Tratamiento::REGISTRO_EXITO);
@@ -130,16 +147,12 @@ class ResidenteController extends AbstractController
         //ENVIO DEL FORMULARIO DE AÑADIR CONSTANTES VITALES
         if($form_constantes->isSubmitted() ){
             if($form_constantes->isValid()){
-                if(!preg_match("/\d{2,3}sy\/\d{2,3}$/",$form_constantes['tension_arterial']->getData())){
-                    $this->addFlash('error','El valor de Tension arterial introducido no es correcto');
-                }else{
                     $em = $this->getDoctrine()->getManager();
                     $constantes->setResidente($residente);
                     $constantes->setFechaCons(new \DateTime());
                     $em->persist($constantes);
                     $em->flush();
                     $this->addFlash('success',ConstantesVitales::REGISTRO_EXITO);
-                }
             }elseif(!$form_constantes->isValid()){
                 $this->addFlash('error',ConstantesVitales::REGISTRO_ERROR);
             }
@@ -194,6 +207,8 @@ class ResidenteController extends AbstractController
                         throw new \Exception('¡Ups! Ha ocurrido un error, sorry');
                     }
                     $residente->setFoto($newFilename);
+                }else{
+                    $residente->setFoto(new File($this->getParameter('imagenes_directory').'/'.$residente->getFoto()));
                 }
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
